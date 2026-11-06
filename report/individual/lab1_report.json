@@ -1,0 +1,211 @@
+{
+ "seed": 5743,
+ "predictions": {
+  "0.88": {
+   "text": "precision cao hơn recall vì dữ liệu mất cân bằng, spam chiếm rất ít, mô hình Logistic Regression với ngưỡng chuẩn 0.5 sẽ thiên về gán nhãn ham, khiến số lượng FP ít hơn số lượng FN",
+   "time": "15:23:32"
+  },
+  "50": {
+   "text": "Với lr=0.001, đường loss gần như thẳng; với lr=50, đường loss dao động lớn",
+   "time": "15:23:44"
+  },
+  "không": {
+   "text": "F1 của MLP sẽ tương đương hoặc chỉ nhỉnh hơn Logistic Regression một chút vì đầu vào Bag-of-Words không có cấu trúc không gian sâu để MLP khai thác hết sức mạnh",
+   "time": "15:24:07"
+  },
+  "dl_relu": {
+   "text": "Nếu bỏ ReLU, hai lớp Linear liên tiếp sẽ thu gọn về một phép biến đổi tuyến tính đơn lẻ tương đương Logistic Regression; F1 sẽ xấp xỉ bằng hoặc kém hơn một chút so với mô hình ban đầu do mất đi tính phi tuyến",
+   "time": "15:24:18"
+  },
+  "emb_search": {
+   "text": "spam",
+   "time": "15:26:55"
+  },
+  "emb_tricky": {
+   "text": "dự đoán Encoder + LogReg đoán đúng nhiều hơn",
+   "time": "15:28:49"
+  },
+  "llm_models": {
+   "text": "openai/gpt-oss-120b có chất lượng tổng thể cao hơn openai/gpt-oss-20b, nhưng mức chênh lệch F1 không quá lớn trong một số benchmark. Đặc biệt, model 120B có chi phí API cao gấp đúng 2 lần; cả hai đều có F1 vượt trội hoặc ngang Embedding nhưng độ trễ cao hơn",
+   "time": "16:05:51"
+  },
+  "llm_fewshot": {
+   "text": "Few-shot giữ nguyên hoặc tăng nhẹ F1 lên gần 1.0; chi phí token tăng khoảng 3 lần do prompt dài hơn khi bổ sung 4 ví dụ",
+   "time": "15:56:38"
+  },
+  "tradeoff": {
+   "text": "BoW + LogReg và Embedding + LogReg (3b) sẽ nằm trên đường Pareto vì tối ưu tuyệt đối về tốc độ và F1; toàn bộ các mô hình LLM Phần 4 sẽ nằm bên phải vạch SLA 50ms do độ trễ mạng và suy luận lên tới hàng trăm ms",
+   "time": "16:06:57"
+  },
+  "hard_eval": {
+   "text": "Mô hình BoW Phần 1 sẽ rớt điểm nhất do từ vựng bị cố tình bẻ cong; LLM zero-shot thường dễ dính prompt injection; LLM kèm prompt phòng thủ (4d) và Embedding (3b) sẽ giữ vững F1 cao nhất",
+   "time": "16:07:17"
+  }
+ },
+ "checks": {
+  "1.1 vectorize": true,
+  "1.2 sigmoid / predict_proba": true,
+  "1.3 train_logreg": true,
+  "1.4 metrics": true,
+  "2.1 build_mlp": true,
+  "2.2 train_mlp": true,
+  "3.1–3.2 cosine / top_k_similar": true,
+  "3.3 knn_predict": true,
+  "4.2–4.3 prompt / parse_label": true,
+  "4.1 + 4.4 call_openai / llm_classify_batch": true,
+  "tính tay: baseline_accuracy": true,
+  "tính tay: sigmoid_0": true,
+  "tính tay: f1_example": true,
+  "tính tay: cosine_example": true,
+  "tính tay: llm_cost_per_day": true
+ },
+ "experiments": [
+  {
+   "key": "0.88",
+   "time": "15:23:32"
+  },
+  {
+   "key": "50",
+   "time": "15:23:44"
+  },
+  {
+   "key": "không",
+   "time": "15:24:07"
+  },
+  {
+   "key": "dl_relu",
+   "time": "15:24:18"
+  },
+  {
+   "key": "emb_search",
+   "time": "15:26:55"
+  },
+  {
+   "key": "emb_tricky",
+   "time": "15:28:49"
+  },
+  {
+   "key": "llm_models",
+   "time": "15:29:05"
+  },
+  {
+   "key": "llm_models",
+   "time": "15:35:06"
+  },
+  {
+   "key": "llm_models",
+   "time": "15:44:00"
+  },
+  {
+   "key": "llm_fewshot",
+   "time": "15:56:39"
+  },
+  {
+   "key": "tradeoff",
+   "time": "16:06:59"
+  },
+  {
+   "key": "hard_eval",
+   "time": "16:07:20"
+  }
+ ],
+ "challenge": 1,
+ "results": {
+  "1. BoW + LogReg (tự code)": {
+   "accuracy": 0.9690322580645161,
+   "precision": 0.9888888888888889,
+   "recall": 0.7946428571428571,
+   "f1": 0.8811881188118811,
+   "f1_SUB": 0.8235294117647058,
+   "train_s": 10.492540048000592,
+   "msg_per_s": 8457.20926016632,
+   "p50_ms": 0.0584254999012046,
+   "p95_ms": 0.1523972000541106,
+   "usd_per_1k": 0.0
+  },
+  "2. BoW + MLP (deep learning)": {
+   "accuracy": 0.9806451612903225,
+   "precision": 0.98989898989899,
+   "recall": 0.875,
+   "f1": 0.9289099526066351,
+   "f1_SUB": 0.888888888888889,
+   "train_s": 10.322574165999868,
+   "msg_per_s": 26607.17279929147,
+   "p50_ms": 0.3508029999466089,
+   "p95_ms": 0.8034507999127525,
+   "usd_per_1k": 0.0
+  },
+  "3a. Encoder (MiniLM) + kNN": {
+   "accuracy": 0.9651612903225807,
+   "precision": 0.8455284552845529,
+   "recall": 0.9285714285714286,
+   "f1": 0.8851063829787236,
+   "f1_SUB": 0.8780487804878048,
+   "train_s": 105.28423571100029,
+   "msg_per_s": 19.880131479023177,
+   "p50_ms": 131.14230449991737,
+   "p95_ms": 202.00242459982292,
+   "usd_per_1k": 0.0
+  },
+  "3b. Encoder (MiniLM) + LogReg": {
+   "accuracy": 0.9870967741935484,
+   "precision": 0.9811320754716981,
+   "recall": 0.9285714285714286,
+   "f1": 0.9541284403669724,
+   "f1_SUB": 0.9230769230769231,
+   "train_s": 107.60917017200063,
+   "msg_per_s": 19.860052865062276,
+   "p50_ms": 78.39752900008534,
+   "p95_ms": 178.1234192002557,
+   "usd_per_1k": 0.0
+  },
+  "3c. Encoder (MiniLM) + MLP head": {
+   "accuracy": 0.984516129032258,
+   "precision": 0.9629629629629629,
+   "recall": 0.9285714285714286,
+   "f1": 0.9454545454545454,
+   "f1_SUB": 0.8947368421052632,
+   "train_s": 107.60309982900071,
+   "msg_per_s": 38.18532779614675,
+   "p50_ms": 30.214236000119854,
+   "p95_ms": 39.377275200331496,
+   "usd_per_1k": 0.0
+  },
+  "4a. LLM nhỏ zero-shot": {
+   "accuracy": 0.85,
+   "precision": 0.85,
+   "recall": 0.85,
+   "f1": 0.85,
+   "f1_SUB": 0.85,
+   "train_s": 0.0,
+   "msg_per_s": 1.7863326418242496,
+   "p50_ms": 421.51422499955515,
+   "p95_ms": 957.762490800813,
+   "usd_per_1k": 0.0
+  },
+  "4b. LLM lớn zero-shot": {
+   "accuracy": 0.825,
+   "precision": 0.8095238095238095,
+   "recall": 0.85,
+   "f1": 0.8292682926829269,
+   "f1_SUB": 0.8292682926829269,
+   "train_s": 0.0,
+   "msg_per_s": 2.7872794426767826,
+   "p50_ms": 342.9877934995602,
+   "p95_ms": 472.4583106993122,
+   "usd_per_1k": 0.0
+  },
+  "4c. LLM nhỏ few-shot": {
+   "accuracy": 0.825,
+   "precision": 0.8421052631578947,
+   "recall": 0.8,
+   "f1": 0.8205128205128205,
+   "f1_SUB": 0.8205128205128205,
+   "train_s": 0.0,
+   "msg_per_s": 1.6914150543289839,
+   "p50_ms": 411.9662765006069,
+   "p95_ms": 1488.9566609514984,
+   "usd_per_1k": 0.0
+  }
+ }
+}
